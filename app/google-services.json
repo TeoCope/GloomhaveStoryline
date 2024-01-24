@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "46913732478",
+    "project_id": "gloomhaven-storyline-e9667",
+    "storage_bucket": "gloomhaven-storyline-e9667.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46913732478:android:6d74b139643d3be54cbd2f",
+        "android_client_info": {
+          "package_name": "com.example.gloomhavestoryline2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA58KMPzM4sI31SGI2M57O9J7sFU8wyFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46913732478:android:b92d7d23b6c36d484cbd2f",
+        "android_client_info": {
+          "package_name": "com.example.gloomhavenstoryline2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA58KMPzM4sI31SGI2M57O9J7sFU8wyFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

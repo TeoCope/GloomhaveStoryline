@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceContainerHighest"
+    android:paddingHorizontal="16dp">
+
+    <TextView
+        android:id="@+id/dialogNewGameTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_game"
+        android:textColor="?attr/colorOnSurface"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        android:textAlignment="center"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="?attr/textInputFilledStyle"
+        android:id="@+id/dialogNewGameTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconMode="clear_text"
+        android:hint="@string/squad_name"
+        app:helperText="Max lenght"
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+</LinearLayout>

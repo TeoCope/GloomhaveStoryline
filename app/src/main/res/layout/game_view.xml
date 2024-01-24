@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="game"
+            type="com.example.gloomhavestoryline2.db.entities.Game" />
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="64dp">
+
+        <ImageView
+            android:id="@+id/squadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
+
+        <TextView
+            android:id="@+id/squadName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/squadImage"
+            android:maxLines="1"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:text="@{game.squadName}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/squadMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/squadName"
+            android:gravity="center"
+            android:layout_toEndOf="@id/squadImage"
+            android:maxLines="2"
+            android:paddingEnd="16dp"
+            android:text="Giocatore1, Giocatore2, Giocatore 3, Giocatore 4"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="italic" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/squadMembers"
+            android:paddingTop="16dp" />
+
+    </RelativeLayout>
+</layout>
