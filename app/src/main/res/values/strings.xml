@@ -4,13 +4,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="account">Account</string>
     <string name="join_the_game">Join the game</string>
-    <string name="add_game">Add Game</string>
+    <string name="new_game">New Game</string>
     <string name="squad_name">Squad Name</string>
 
     <string name="empty_field">Empty Field</string>
     <string name="too_short">Too Short min 8 characters</string>
     <string name="error_format_invalid">Invalid format</string>
-    <string name="error_too_short">Too short, minimum 8 characters</string>
+    <string name="error_too_short">Too short</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -21,4 +21,24 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="login_uppercase">LOGIN</string>
+    <string name="nickname">Nickname</string>
+    <string name="registration_date">Registration Date:</string>
+    <string name="games_rules">Games rules</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="delete_account">Delete account</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="createa_new_game">Createa new Game</string>
+    <string name="storyline">Storyline</string>
+    <string name="shop">Shop</string>
+    <string name="character">Character</string>
+    <string name="party_sheet">Party Sheet</string>
+
+    <string-array name="characters">
+        <item>Demolitionist</item>
+        <item>Voidwarden</item>
+        <item>Hatchet</item>
+        <item>Red Guard</item>
+    </string-array>
 </resources>

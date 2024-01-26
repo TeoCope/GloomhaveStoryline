@@ -13,44 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:minHeight="64dp">
-
-        <ImageView
-            android:id="@+id/squadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp" />
+        android:minHeight="64dp"
+        android:layout_marginHorizontal="@dimen/edit_text_vertical_margin">
 
         <TextView
             android:id="@+id/squadName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/squadImage"
+            android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
             android:maxLines="1"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
             android:text="@{game.squadName}"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textStyle="bold" />
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            android:textAlignment="textStart"/>
 
         <TextView
             android:id="@+id/squadMembers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/squadName"
-            android:gravity="center"
-            android:layout_toEndOf="@id/squadImage"
-            android:maxLines="2"
-            android:paddingEnd="16dp"
-            android:text="Giocatore1, Giocatore2, Giocatore 3, Giocatore 4"
-            android:textAppearance="?attr/textAppearanceBody2"
+            android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+            android:maxLines="1"
+            android:text="@{game.squadMembers}"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
             android:textStyle="italic" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/squadMembers"
-            android:paddingTop="16dp" />
+            android:layout_marginTop="16dp"/>
 
     </RelativeLayout>
 </layout>

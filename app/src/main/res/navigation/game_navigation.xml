@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_navigation"
+    app:startDestination="@id/storyline">
+
+    <fragment
+        android:id="@+id/storyline"
+        android:name="com.example.gloomhavestoryline2.ui.game.StorylineFragment"
+        android:label="fragment_storyline"
+        tools:layout="@layout/fragment_storyline" />
+    <fragment
+        android:id="@+id/shop"
+        android:name="com.example.gloomhavestoryline2.ui.game.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" />
+    <fragment
+        android:id="@+id/characther"
+        android:name="com.example.gloomhavestoryline2.ui.game.CharactherFragment"
+        android:label="fragment_characther"
+        tools:layout="@layout/fragment_characther" />
+    <fragment
+        android:id="@+id/party"
+        android:name="com.example.gloomhavestoryline2.ui.game.PartyFragment"
+        android:label="fragment_party"
+        tools:layout="@layout/fragment_party" />
+</navigation>

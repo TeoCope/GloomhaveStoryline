@@ -39,14 +39,6 @@ object EditTextError {
         }
     }
 
-    fun validatePassword(string: String): Boolean{
-        return when{
-            empyString(string) -> {
-                _error.value =
-            }
-        }
-    }
-
     private fun empyString(string: String): Boolean{
         return if (string.isEmpty())
             false

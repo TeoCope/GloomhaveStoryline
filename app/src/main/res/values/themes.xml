@@ -28,15 +28,8 @@
         <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
 
-        <!-- Windows -->
-        <!--<item name="android:windowLightStatusBar">true</item>
-        <item name="android:navigationBarColor">@color/md_theme_light_primary</item>-->
-
         <!-- Font family -->
         <item name="fontFamily">@font/inknut_antiqua_regular</item>
-
-        <!-- Top bar Style -->
-        <!--        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>-->
 
 
 

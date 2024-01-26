@@ -4,14 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="?attr/colorSurfaceContainerHighest"
-    android:paddingHorizontal="16dp">
+    android:background="?attr/colorSurfaceContainerHighest">
 
     <TextView
         android:id="@+id/dialogNewGameTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_game"
+        android:text="@string/new_game"
         android:textColor="?attr/colorOnSurface"
         android:textAppearance="?attr/textAppearanceHeadlineSmall"
         android:textAlignment="center"/>
@@ -21,11 +20,9 @@
         android:id="@+id/dialogNewGameTextField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
         app:endIconMode="clear_text"
         android:hint="@string/squad_name"
-        app:helperText="Max lenght"
-        app:counterEnabled="true"
-        app:counterMaxLength="10"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -35,6 +32,29 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:id="@+id/dialogNewGameDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/edit_text_vertical_margin"
+        android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+        app:errorEnabled="true">
 
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            app:simpleItems="@array/characters"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialogBtnCreateNewGame"
+        style="@style/Widget.Material3.Button.TextButton.Dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/createa_new_game"/>
 
 </LinearLayout>

@@ -1,9 +1,11 @@
 package com.example.gloomhavestoryline2.ui.home
 
-import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -13,47 +15,32 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentHomeBinding
 import com.example.gloomhavestoryline2.db.entities.Game
-import com.example.gloomhavestoryline2.other.`object`.EditTextError
-import com.example.gloomhavestoryline2.other.applySystemGestureInsets
-import com.example.gloomhavestoryline2.other.listeners.ProgressIndicatorListener
+import com.example.gloomhavestoryline2.db.entities.User
 import com.example.gloomhavestoryline2.ui.adapter.GameListAdapter
-import com.example.gloomhavestoryline2.view_model.FirestoreViewModel
+import com.example.gloomhavestoryline2.ui.game.GameActivity
+import com.example.gloomhavestoryline2.view_model.HomeViewModel
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class HomeFragment : Fragment(), ProgressIndicatorListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class HomeFragment : Fragment() {
 
     private val TAG = "HOME_FRAGMENT"
 
     private lateinit var binding: FragmentHomeBinding
-    private val firestoreViewModel: FirestoreViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var dialogView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return binding.root
     }
@@ -61,74 +48,102 @@ class HomeFragment : Fragment(), ProgressIndicatorListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.applySystemGestureInsets()
+        //view.applySystemGestureInsets()
 
         binding.homeFragment = this
 
         val recyclerView = binding.homeRecyclerView
         val adapter = GameListAdapter(emptyList())
-        firestoreViewModel.progressIndicatorListener = this
-
-        firestoreViewModel.setGames("sGHx44FS6L1IFa51lEqM","3XTaQ8uKHuKBXWrRVDJ8")
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val gameObserver = Observer<List<Game>> {newGameList ->
-            adapter.updateGameList(newGameList)
+        val userObserver = Observer<User> {newUser ->
+            homeViewModel.setGameList(newUser.games)
         }
-        firestoreViewModel.games.observe(viewLifecycleOwner, gameObserver)
-    }
+        homeViewModel.userLogged.observe(viewLifecycleOwner,userObserver)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        val gameListObserver = Observer<List<Game>> {newGameList ->
+            if (newGameList.isNotEmpty()) {
+                binding.textViewNoGames.visibility = View.GONE
+                binding.homeRecyclerView.visibility = View.VISIBLE
+                adapter.updateGameList(newGameList)
+            } else {
+                binding.homeRecyclerView.visibility = View.GONE
+                binding.textViewNoGames.visibility = View.VISIBLE
             }
+        }
+        homeViewModel.gameList.observe(viewLifecycleOwner,gameListObserver)
+
+        dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_newgame, null)
+        val editText = dialogView.findViewById<TextInputLayout>(R.id.dialogNewGameTextField)
+        val dropdownMenu = dialogView.findViewById<TextInputLayout>(R.id.dialogNewGameDropdownMenu)
+        val btnNewGame = dialogView.findViewById<MaterialButton>(R.id.dialogBtnCreateNewGame)
+
+        btnNewGame.setOnClickListener {
+            val squadName = editText.editText?.text.toString().trim()
+            val character = dropdownMenu.editText?.text.toString().trim()
+            homeViewModel.newGame(squadName, character)
+        }
+
+        val squadNameErrorObserver = Observer<Int?> {newError ->
+            if (newError != null)
+                editText.error = getString(newError)
+            else
+                editText.error = newError
+        }
+        homeViewModel.squadNameError.observe(viewLifecycleOwner,squadNameErrorObserver)
+
+        val characterErrorObserver = Observer<Int?> {newError ->
+            if (newError != null) {
+                dropdownMenu.error = getString(newError)
+            } else {
+                dropdownMenu.error = null
+            }
+        }
+        homeViewModel.characterError.observe(viewLifecycleOwner,characterErrorObserver)
+
+        val newGameIdObserver = Observer<String> {newGameId ->
+            val intent = Intent(activity, GameActivity::class.java)
+            intent.putExtra("gameId",newGameId)
+            startActivity(intent)
+            activity?.finish()
+        }
+        homeViewModel.newGameId.observe(viewLifecycleOwner, newGameIdObserver)
     }
 
-    override fun startProcess() {
-        activity?.findViewById<LinearProgressIndicator>(R.id.linearProgressIndicator)?.visibility = View.VISIBLE
-    }
-
-    override fun endProcess() {
-        activity?.findViewById<LinearProgressIndicator>(R.id.linearProgressIndicator)?.visibility = View.GONE
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_top_app_bar_menu, menu)
     }
 
     fun newGame() {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_newgame,null)
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_newgame, null)
         val editText = view.findViewById<TextInputLayout>(R.id.dialogNewGameTextField)
+        val dwopdownMenu = view.findViewById<TextInputLayout>(R.id.dialogNewGameDropdownMenu)
         context?.let {
-           val dialog =  MaterialAlertDialogBuilder(it)
-                .setView(view)
-                .setNeutralButton("Bottone Neutrale") { dialog, which ->
+            MaterialAlertDialogBuilder(it)
+                .setView(dialogView)
+                .show()
 
-            }.show()
-
-            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(View.OnClickListener {
-                var closeDialog = false
-                val gameName = editText.editText?.text.toString().trim()
-                EditTextError.error.observe(this) { error ->
-                    editText.error = error
+            /*dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                val squadName = editText.editText?.text.toString().trim()
+                val character = dwopdownMenu.editText?.text.toString()
+                var squadNameValid = true
+                var characterValid = true
+                if (squadName.isEmpty() || squadName.length < 3) {
+                    editText.error = getString(R.string.error_too_short)
+                    squadNameValid = false
                 }
-                if (firestoreViewModel.newGame(gameName))
-                    closeDialog = true
-                if (closeDialog)
-                    dialog.dismiss()
-            })
+                if (character.isEmpty()) {
+                    dwopdownMenu.error = getString(R.string.empty_field)
+                    characterValid = false
+                }
+                if (squadNameValid && characterValid){
+                    editText.error = null
+                    dwopdownMenu.error = null
+                    homeViewModel.newGame(squadName,character)
+                }
+            }*/
         }
     }
 }

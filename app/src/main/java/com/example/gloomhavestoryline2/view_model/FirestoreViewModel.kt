@@ -11,14 +11,11 @@ import com.example.gloomhavestoryline2.db.entities.Mission
 import com.example.gloomhavestoryline2.db.entities.User
 import com.example.gloomhavestoryline2.db.repository.FirebaseRepository
 import com.example.gloomhavestoryline2.other.`object`.EditTextError
-import com.example.gloomhavestoryline2.other.listeners.ProgressIndicatorListener
 import kotlinx.coroutines.launch
 
 class FirestoreViewModel: ViewModel() {
 
     val TAG = "FIRESTORE_VIEW_MODEL"
-
-    var progressIndicatorListener: ProgressIndicatorListener? = null
 
     private val _error: MutableLiveData<String?> = MutableLiveData()
     val error: LiveData<String?>
@@ -40,27 +37,16 @@ class FirestoreViewModel: ViewModel() {
     val games: LiveData<List<Game>>
         get() = _games
 
-    init {
+    /*init {
         viewModelScope.launch {
             _missions.value = FirebaseRepository.getAllMissions()
             _items.value = FirebaseRepository.getAllItems()
             _characters.value = FirebaseRepository.getAllCharacters()
-            _users.value = FirebaseRepository.getAllUsers()
         }
-    }
-
-    fun setGames(vararg gameId: String) {
-        progressIndicatorListener?.isVisible()
-        viewModelScope.launch {
-            _games.value = FirebaseRepository.getGame(*gameId)
-            progressIndicatorListener?.isGone()
-        }
-    }
+    }*/
 
     fun newGame(name: String){
-        progressIndicatorListener?.isVisible()
         if (!EditTextError.validateText(name)) {
-            progressIndicatorListener?.isGone()
             return
         }
 
