@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.privacysandbox.ads.adservices.appsetid.AppSetId
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
+
 data class Character(
     var id: String = "",
     var nickname: String = "",
@@ -15,4 +15,4 @@ data class Character(
     val level: Int = 1,
     val abilities: List<Ability> = listOf(),
     val items: List<Item> = listOf()
-) : Parcelable
+)

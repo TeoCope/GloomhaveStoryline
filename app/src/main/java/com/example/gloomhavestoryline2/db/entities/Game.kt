@@ -6,9 +6,10 @@ import kotlinx.parcelize.Parcelize
 data class Game(
     val id: String = "",
     val squadName: String = "",
-    val ready: Boolean = false,
-    val currentMission: Int = 0,
+    var currentMission: Int = 0,
     val squad: List<Character> = listOf(),
+    val items: List<Item> = listOf(),
+    val missions: List<Mission> = listOf(),
     val charactersAvailable: MutableList<String> = mutableListOf("Demolitionist","Hatchet","Voidwarden","Red Guard")
 ) {
     fun getSquadMembers(): String{

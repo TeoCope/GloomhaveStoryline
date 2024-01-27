@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="homeViewModel"
+            type="com.example.gloomhavestoryline2.view_model.HomeViewModel" />
+        <variable
+            name="game"
+            type="com.example.gloomhavestoryline2.db.entities.Game" />
+        <variable
+            name="joinGameFragment"
+            type="com.example.gloomhavestoryline2.ui.home.JoinGameFragment" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+        tools:context=".ui.home.JoinGameFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchGameWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fragment_vertical_margin">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gameCodeTextInputLayout"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                    android:hint="@string/enter_game_code_invite"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                    android:text="@string/search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/gameCodeTextInputLayout"
+                    app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+                    android:onClick="@{() -> joinGameFragment.onSearchClick()}"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/searchGameWrapper"
+                android:layout_marginVertical="@dimen/fragment_vertical_margin" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/gameInfoWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/squadName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/squad_name"
+                        android:textAppearance="?attr/textAppearanceSubtitle2" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="@{game.squadName}"
+                        android:textAlignment="textEnd"
+                        android:textAppearance="?attr/textAppearanceSubtitle2" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/members"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                    android:maxLines="2"
+                    android:text="@{game.squadMembers}"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    app:layout_constraintTop_toBottomOf="@+id/squadName" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dropdownMenu"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                    android:hint="@string/character"
+                    app:endIconMode="dropdown_menu"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@id/members">
+
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnJoinGame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                    android:text="@string/join_the_game"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dropdownMenu"
+                    app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+                    android:onClick="@{() -> joinGameFragment.onJoinGameClick()}"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+</layout>

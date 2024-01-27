@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gloomhavestoryline2.databinding.GameViewBinding
 import com.example.gloomhavestoryline2.db.entities.Game
 
-class GameListAdapter(private var gameList: List<Game>): RecyclerView.Adapter<GameListAdapter.GameViewHolder>() {
+class GameListAdapter(private var gameList: List<Game>,private val onClick: (String) -> Unit): RecyclerView.Adapter<GameListAdapter.GameViewHolder>() {
+
+    private val TAG = "GAME_LIST_ADAPTER"
 
     class GameViewHolder private constructor(val binding: GameViewBinding): RecyclerView.ViewHolder(binding.root) {
         companion object {
@@ -28,13 +30,17 @@ class GameListAdapter(private var gameList: List<Game>): RecyclerView.Adapter<Ga
     }
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        holder.binding.game = gameList[position]
+        holder.binding.also {
+            it.game = gameList[position]
+            it.root.setOnClickListener {
+                onClick(gameList[position].id)
+            }
+        }
     }
 
     fun updateGameList(newList: List<Game>) {
         gameList = newList
         notifyDataSetChanged()
-        Log.d("Adapter", "Lista aggiornata: $gameList")
     }
 
 

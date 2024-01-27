@@ -27,9 +27,20 @@
                 android:minHeight="?attr/actionBarSize"
                 app:layout_scrollEffect="compress"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:title="@string/app_name" />
+                app:title="@string/app_name"
+                app:menu="@menu/game_top_app_bar_menu"/>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:showAnimationBehavior="outward"
+            app:hideAnimationBehavior="inward"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            android:visibility="gone"/>
 
         <fragment
             android:id="@+id/nav_host_fragment_game"
@@ -37,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintTop_toBottomOf="@id/linearProgressIndicator"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
             app:navGraph="@navigation/game_navigation" />
 

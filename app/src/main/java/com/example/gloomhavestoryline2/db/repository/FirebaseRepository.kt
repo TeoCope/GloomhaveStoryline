@@ -10,22 +10,18 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 object FirebaseRepository {
     val TAG = "FIREBASE_REPOSITORY"
 
     var firestoreDB = FirebaseFirestore.getInstance()
 
-    suspend fun getAllMissions(): List<Mission> {
+    suspend fun getMissions(): List<Mission> {
         return try {
-            firestoreDB.collection("missions").orderBy("number", Query.Direction.ASCENDING).get()
-                .await().documents.mapNotNull { it.toObject(Mission::class.java) }
+            firestoreDB.collection("missions").orderBy("number", Query.Direction.ASCENDING).get().await().documents.mapNotNull { it.toObject(Mission::class.java) }
         } catch (e: Exception) {
-            Log.e(TAG, "Missions download failure", e)
+            Log.e(TAG, "Mission dowload failure", e)
             emptyList()
         }
     }
@@ -100,9 +96,9 @@ object FirebaseRepository {
     }
 
     /* Games collection */
-    suspend fun getGame(gameID: String): Game?{
+    fun getGame(gameID: String): DocumentReference?{
         return try {
-            firestoreDB.collection("games").document(gameID).get().await().toObject(Game::class.java)
+            firestoreDB.collection("games").document(gameID)
         } catch (e: Exception) {
             Log.e(TAG, "Game download failure", e)
             null
@@ -130,18 +126,13 @@ object FirebaseRepository {
         user: User
     ): String? {
         return try {
-            val newCharacter = getCharacter(character)
+            val newCharacter = newSquadMember(user, character) ?: return null
+            newCharacter.isHost = true
             val newSquad: MutableList<Character> = mutableListOf()
-            if (newCharacter != null) {
-                newCharacter.id = user.id
-                newCharacter.nickname = user.nickname
-                newCharacter.isHost = true
-                newCharacter.name = character
-                newSquad.add(newCharacter)
-            }
+            newSquad.add(newCharacter)
             val gameId = firestoreDB.collection("games").document().id
-            if (!newSquad.isEmpty()) {
-                val newGame = Game(id = gameId, squadName = squadName, squad = newSquad)
+            if (newSquad.isNotEmpty()) {
+                val newGame = Game(id = gameId, squadName = squadName, squad = newSquad, items = getAllItems(), missions = getMissions())
                 newGame.charactersAvailable.remove(character)
                 firestoreDB.collection("games").document(gameId).set(newGame)
             }
@@ -154,6 +145,36 @@ object FirebaseRepository {
             Log.e(TAG, "Error to create a new game", e)
             null
         }
+    }
+
+    suspend fun updateGameSquad(gameID: String, user: User, character: String): Boolean {
+        return try {
+            val newCharacter = newSquadMember(user,character)
+            firestoreDB.collection("games").document(gameID).update("squad", FieldValue.arrayUnion(newCharacter)).await()
+            firestoreDB.collection("games").document(gameID).update("charactersAvailable", FieldValue.arrayRemove(character)).await()
+            updateUserGameList(user,gameID)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error to upload game", e)
+            false
+        }
+    }
+
+    suspend fun updateGameMission(currentMission: Int?,gameID: String){
+        try {
+            firestoreDB.collection("games").document(gameID).update("currentMission", FieldValue.increment(1)).await()
+        } catch (e: Exception) {
+            Log.e(TAG, "Game mission update failure", e)
+        }
+    }
+
+    private suspend fun newSquadMember(user: User, character: String): Character? {
+        val newCharacter = getCharacter(character)
+        if (newCharacter != null) {
+            newCharacter.id = user.id
+            newCharacter.nickname = user.nickname
+            newCharacter.name = character
+        }
+        return newCharacter
     }
 
     private suspend fun getCharacter(character: String): Character? {

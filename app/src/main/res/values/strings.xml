@@ -34,6 +34,14 @@
     <string name="shop">Shop</string>
     <string name="character">Character</string>
     <string name="party_sheet">Party Sheet</string>
+    <string name="enter_game_code_invite">Enter game code invite</string>
+    <string name="search">Search</string>
+    <string name="game_not_found">Game not found</string>
+    <string name="alredy_logged">You are already logged in</string>
+    <string name="full_party">Party is full</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="delete_game">Delete game</string>
+    <string name="dialog_mission_complete">Are you sure you want to complete the mission?</string>
 
     <string-array name="characters">
         <item>Demolitionist</item>

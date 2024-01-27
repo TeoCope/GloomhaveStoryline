@@ -12,6 +12,7 @@ import com.example.gloomhavestoryline2.db.repository.AuthRepository
 import com.example.gloomhavestoryline2.db.repository.FirebaseRepository
 import com.example.gloomhavestoryline2.db.repository.StorageRepository
 import com.example.gloomhavestoryline2.other.enum_class.RequestStatus
+import com.example.gloomhavestoryline2.other.listeners.ProgressIndicator
 import com.example.gloomhavestoryline2.other.listeners.ToastMessage
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel: ViewModel() {
     private val TAG = "HOME_VIEW_MODEL"
     var toastMessage: ToastMessage? = null
+    var progressIndicator: ProgressIndicator? = null
 
     private val _status: MutableLiveData<RequestStatus> = MutableLiveData()
     val status: LiveData<RequestStatus>
@@ -33,6 +35,10 @@ class HomeViewModel: ViewModel() {
     val gameList: LiveData<List<Game>>
         get() = _gameList
 
+    private val _gameResult: MutableLiveData<Game?> = MutableLiveData()
+    val gameResult: LiveData<Game?>
+        get() = _gameResult
+
     private val _newGameId: MutableLiveData<String> = MutableLiveData()
     val newGameId: LiveData<String>
         get() = _newGameId
@@ -45,19 +51,15 @@ class HomeViewModel: ViewModel() {
     val characterError: LiveData<Int?>
         get() = _characterError
 
+    private val _searchGameError: MutableLiveData<Int?> = MutableLiveData()
+    val searchGameError: LiveData<Int?>
+        get() = _searchGameError
+
     init {
         setUserLogged()
     }
 
-    fun setUserLogged(){
-        /*val userID = FirebaseAuth.getInstance().currentUser?.uid
-        viewModelScope.launch {
-            val result = userID?.let { FirebaseRepository.getUser(it) }
-            if (result == null) {
-                return@launch
-            }
-            _userLogged.value = result!!
-        }*/
+    private fun setUserLogged(){
         val userID = Firebase.auth.currentUser?.uid
         val userDocumentReference = userID?.let { FirebaseRepository.getUser(it) }
         userDocumentReference?.addSnapshotListener{ user, error ->
@@ -101,7 +103,6 @@ class HomeViewModel: ViewModel() {
 
     fun dowloadRulebook(){
         viewModelScope.launch {
-            Log.d(TAG, "Inizio download rulebook")
             StorageRepository.downloadRule()
         }
     }
@@ -120,6 +121,47 @@ class HomeViewModel: ViewModel() {
             }
             _newGameId.value = result!!
         }
+    }
+
+    fun searchGame(gameID: String){
+        if (!gameIdValidation(gameID)) {
+            return
+        }
+        val result = FirebaseRepository.getGame(gameID)
+        result?.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                Log.e(TAG, "Error load game",error)
+                return@addSnapshotListener
+            }
+            if (snapshot != null && snapshot.exists()) {
+                val game = snapshot.toObject(Game::class.java)
+                if (game?.charactersAvailable?.size == 0){
+                    _searchGameError.value = R.string.full_party
+                    return@addSnapshotListener
+                }
+                _gameResult.value = game!!
+                _searchGameError.value = null
+            } else {
+                _searchGameError.value = R.string.game_not_found
+                return@addSnapshotListener
+            }
+        }
+    }
+
+    fun joinGame(character: String) {
+        val gameID = gameResult.value?.id
+        val user = userLogged.value
+        viewModelScope.launch {
+            progressIndicator?.setVisible()
+            FirebaseRepository.updateGameSquad(gameID!!,user!!,character)
+            progressIndicator?.setGone()
+        }
+    }
+
+
+    fun lostFocus(){
+        _searchGameError.value = null
+        _gameResult.value = null
     }
 
     private fun validateSquadName(squadName: String): Boolean{
@@ -149,6 +191,20 @@ class HomeViewModel: ViewModel() {
                 _characterError.value = null
                 true
             }
+        }
+    }
+
+    private fun gameIdValidation(gameID: String): Boolean{
+        return when {
+            gameID.isEmpty() -> {
+                _searchGameError.value = R.string.empty_field
+                false
+            }
+            userLogged.value?.games?.contains(gameID) == true -> {
+                _searchGameError.value = R.string.alredy_logged
+                false
+            }
+            else -> true
         }
     }
 }

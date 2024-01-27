@@ -8,6 +8,12 @@
         android:contentDescription="@string/home"/>
 
     <item
+        android:id="@+id/joinGame"
+        android:title="@string/join_the_game"
+        android:icon="@drawable/join_game_icon"
+        android:contentDescription="@string/join_the_game"/>
+
+    <item
         android:id="@+id/profile"
         android:icon="@drawable/account_icon"
         android:title="@string/profile"

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,20 +15,28 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.gloomhavestoryline2.MainActivity
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.ActivityGameBinding
+import com.example.gloomhavestoryline2.db.entities.Game
+import com.example.gloomhavestoryline2.other.enum_class.RequestStatus
+import com.example.gloomhavestoryline2.ui.home.GAME_ID
 import com.example.gloomhavestoryline2.view_model.GameViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class GameActivity : AppCompatActivity() {
+
+    private val TAG = "GAME_ACTIVITY"
+
     private lateinit var binding: ActivityGameBinding
+    private lateinit var linearProgressIndicator: LinearProgressIndicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_game)
 
-        val gameId = intent.getStringExtra("gameId")
-
-        val gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
+        val gameId = intent.getStringExtra(GAME_ID)
+        Log.d(TAG, "$gameId")
+        val gameViewModel: GameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
         if (gameId != null) {
             gameViewModel.setGame(gameId)
         } else {
@@ -44,5 +53,19 @@ class GameActivity : AppCompatActivity() {
 
         val bottomNavigation : BottomNavigationView = binding.bottomNavigationView
         bottomNavigation.setupWithNavController(navController)
+
+        linearProgressIndicator = binding.linearProgressIndicator
+
+        gameViewModel.game.observe(this) {
+
+        }
+    }
+
+    fun linearProgressIndicatorVisible(){
+        linearProgressIndicator.visibility = View.VISIBLE
+    }
+
+    fun linearProgressIndicatorGone(){
+        linearProgressIndicator.visibility = View.GONE
     }
 }
