@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="character"
+            type="com.example.gloomhavestoryline2.db.entities.Character" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.game.character.InfoCharacterFragment"
+        android:layout_marginVertical="@dimen/edit_text_vertical_margin"
+        android:layout_marginHorizontal="@dimen/fragment_horizontal_margin">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{character.fullName}"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceTitleLarge"/>
+
+        <LinearLayout
+            android:id="@+id/scoreWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:layout_marginTop="@dimen/edit_text_horizontal_margin">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/moneyTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/money"
+                android:layout_marginHorizontal="@dimen/edit_text_horizontal_margin"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/experienceTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/experience"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/xpLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/scoreWrapper"
+            android:text="@{character.fullExperience}"
+            android:textAppearance="?attr/textAppearanceTitleSmall"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/xpLabel"
+            android:layout_marginVertical="@dimen/fragment_horizontal_margin"
+            android:progress="@{character.experience}"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAssign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/linearProgressIndicator"
+            android:layout_marginTop="@dimen/fragment_vertical_margin"
+            app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+            android:text="@string/assign"
+            android:textAppearance="?attr/textAppearanceTitleMedium"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

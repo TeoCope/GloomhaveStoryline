@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item"
+            type="com.example.gloomhavestoryline2.db.entities.Item" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemCard"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shapeAppearance="?attr/shapeAppearanceCornerExtraSmall"
+        android:layout_margin="2dp"
+        android:clickable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/img"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{item.name}"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="@dimen/fragment_horizontal_margin">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{item.availNumber}"
+                        android:textAppearance="?attr/textAppearanceTitleSmall"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{item.price}"
+                        android:textAlignment="textEnd"
+                        android:textAppearance="?attr/textAppearanceTitleSmall" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

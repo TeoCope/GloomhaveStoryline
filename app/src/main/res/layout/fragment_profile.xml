@@ -58,7 +58,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(user.matchInProgress)}"
+                            android:text="@{user.matchInProgress}"
                             android:textAlignment="center"
                             android:textAppearance="?attr/textAppearanceHeadline4"
                             android:textColor="@color/white" />

@@ -1,22 +1,19 @@
 package com.example.gloomhavestoryline2.db.entities
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 data class Game(
     val id: String = "",
     val squadName: String = "",
     var currentMission: Int = 0,
-    val squad: List<Character> = listOf(),
-    val items: List<Item> = listOf(),
-    val missions: List<Mission> = listOf(),
-    val charactersAvailable: MutableList<String> = mutableListOf("Demolitionist","Hatchet","Voidwarden","Red Guard")
+    var squadMembers: List<String> = listOf(),
+    val charactersAvailable: MutableList<String> = mutableListOf("Demolitionist","Hatchet","Voidwarden","Red Guard"),
+    @field:JvmField
+    val isEnd: Boolean = false
 ) {
-    fun getSquadMembers(): String{
-        var newString = "Squad: "
-        for (member in squad) {
-            newString = newString + member.nickname + " "
+    fun getFullSquadMembers() :String {
+        var result = ""
+        for (member in squadMembers) {
+            result += " - $member"
         }
-        return newString
+        return result
     }
 }

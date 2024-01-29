@@ -1,8 +1,5 @@
 package com.example.gloomhavestoryline2.db.entities
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
 
 data class Item(
     val name: String = "",
@@ -11,4 +8,20 @@ data class Item(
     val cost: Int = 0,
     val avail: Int = 0,
     val slot: String = ""
-)
+) {
+    fun getFullName(): String{
+        return "#$number $name"
+    }
+
+    fun getPrice(): String{
+        return "$cost$"
+    }
+
+    fun getHalfPrice(): String{
+        return "${cost/2}$"
+    }
+
+    fun getAvailNumber(): String{
+        return "2 / $avail"
+    }
+}

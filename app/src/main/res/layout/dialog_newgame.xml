@@ -39,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/edit_text_vertical_margin"
         android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        android:hint="@string/character">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"

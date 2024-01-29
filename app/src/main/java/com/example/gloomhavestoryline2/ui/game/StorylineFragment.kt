@@ -43,23 +43,35 @@ class StorylineFragment : Fragment() {
         recyclerView.adapter = adapter
 
         Log.d(TAG, "${gameViewModel.game.value}")
-        gameViewModel.game.observe(viewLifecycleOwner) {newGame: Game ->
-            adapter.updateList(newGame.missions)
+        gameViewModel.missions.observe(viewLifecycleOwner) {newList: List<Mission> ->
+            if (gameViewModel.game.value?.currentMission == newList.size){
+                gameViewModel.gameCompleted()
+                gameViewModel.deleteGame()
+            }
+            val listFiltered = newList.filter { it.number <= gameViewModel.game.value?.currentMission!! + 1 }.sortedBy { it.number }
+            if (listFiltered.isEmpty()) {
+                adapter.updateList(newList.filter { it.number == 1 })
+            } else {
+                adapter.updateList(listFiltered)
+            }
+
         }
 
     }
 
-    fun onMissionClick(mission: Mission) {
+    private fun onMissionClick(mission: Mission) {
+        if (mission.isCompleted) {
+            return
+        }
         context?.let {
-           val dialog = MaterialAlertDialogBuilder(it)
+           MaterialAlertDialogBuilder(it)
                 .setTitle(mission.name)
                 .setMessage(getString(R.string.dialog_mission_complete))
-                .setPositiveButton("Completed") {_,_ ->}
+                .setPositiveButton("Completed") {dialog,_ ->
+                    gameViewModel.missionCompleted(mission.name)
+                    dialog.dismiss()
+                }
                     .show()
-
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
-                Log.d(TAG,"${gameViewModel.missionCompleted()} ${gameViewModel.game.value?.currentMission}")
-            }
         }
     }
 }

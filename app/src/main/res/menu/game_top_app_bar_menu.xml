@@ -2,13 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/inviteFriend"
-        android:title="@string/invite_friends"
-        android:contentDescription="@string/invite_friends"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/deleteGame"
-        android:title="@string/delete_game"
-        android:contentDescription="@string/delete_game"
-        app:showAsAction="never"/>
+        android:id="@+id/home"
+        android:title="@string/home"
+        android:icon="@drawable/home_icon"
+        app:showAsAction="ifRoom"
+        android:contentDescription="@string/home"/>
 </menu>

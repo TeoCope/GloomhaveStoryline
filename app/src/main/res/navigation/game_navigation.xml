@@ -8,21 +8,39 @@
     <fragment
         android:id="@+id/storyline"
         android:name="com.example.gloomhavestoryline2.ui.game.StorylineFragment"
-        android:label="fragment_storyline"
         tools:layout="@layout/fragment_storyline" />
     <fragment
         android:id="@+id/shop"
         android:name="com.example.gloomhavestoryline2.ui.game.ShopFragment"
-        android:label="fragment_shop"
         tools:layout="@layout/fragment_shop" />
     <fragment
         android:id="@+id/characther"
         android:name="com.example.gloomhavestoryline2.ui.game.CharactherFragment"
-        android:label="fragment_characther"
-        tools:layout="@layout/fragment_characther" />
+        tools:layout="@layout/fragment_characther" >
+        <action
+            android:id="@+id/action_characther_to_infoCharacterFragment"
+            app:destination="@id/infoCharacter" />
+        <action
+            android:id="@+id/action_characther_to_abilitiesCharacterFragment"
+            app:destination="@id/abilitiesCharacter" />
+        <action
+            android:id="@+id/action_characther_to_itemsCharacterFragment"
+            app:destination="@id/itemsCharacter" />
+    </fragment>
     <fragment
         android:id="@+id/party"
         android:name="com.example.gloomhavestoryline2.ui.game.PartyFragment"
-        android:label="fragment_party"
         tools:layout="@layout/fragment_party" />
+    <fragment
+        android:id="@+id/infoCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.InfoCharacterFragment"
+        tools:layout="@layout/fragment_info_character" />
+    <fragment
+        android:id="@+id/abilitiesCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.AbilitiesCharacterFragment"
+        tools:layout="@layout/fragment_abilities_character" />
+    <fragment
+        android:id="@+id/itemsCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.ItemsCharacterFragment"
+        tools:layout="@layout/fragment_items_character" />
 </navigation>

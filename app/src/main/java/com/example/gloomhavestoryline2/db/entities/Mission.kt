@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class Mission(
     val name: String = "",
     val number: Int = 0,
+    @field:JvmField
     var isCompleted: Boolean = false
 ) {
     fun getMissionName(): String{

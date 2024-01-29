@@ -1,56 +1,56 @@
-package com.example.gloomhavestoryline2.ui.game
+package com.example.gloomhavestoryline2.ui.game.character
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.gloomhavestoryline2.R
-import com.example.gloomhavestoryline2.databinding.FragmentShopBinding
+import com.example.gloomhavestoryline2.databinding.FragmentItemsCharacterBinding
 import com.example.gloomhavestoryline2.db.entities.Item
-import com.example.gloomhavestoryline2.ui.adapter.ItemListAdapter
+import com.example.gloomhavestoryline2.ui.adapter.ItemCharacterListAdapter
 import com.example.gloomhavestoryline2.view_model.GameViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ShopFragment : Fragment() {
 
-    private val TAG = "SHOP_FRAGMENT"
-    private lateinit var binding: FragmentShopBinding
+class ItemsCharacterFragment : Fragment() {
+
+    private val TAG = "ITEMS_CHARACTER_FRAGMENT"
+    private lateinit var binding: FragmentItemsCharacterBinding
     private val gameViewModel: GameViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_shop, container,false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_items_character, container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = binding.shopRecyclerView
-        val adapter = ItemListAdapter(emptyList()) {item: Item -> onClick(item) }
 
+        val recyclerView = binding.itemsRecyclerView
+        val adapter = ItemCharacterListAdapter(emptyList()) {item -> onItemClick(item)}
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        gameViewModel.items.observe(viewLifecycleOwner) {newItemList: List<Item> ->
-            adapter.updateList(newItemList.filter { it.avail > 0 }.sortedBy { it.number })
+        gameViewModel.characterMain.observe(viewLifecycleOwner) { it ->
+            adapter.updateAdapter(it.items.sortedBy { it.number })
         }
     }
 
-    private fun onClick(item: Item){
+    private fun onItemClick(item: Item) {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle(item.getFullName())
                 .setMessage(item.effect)
-                .setPositiveButton("Buy: ${item.getPrice()}") {dialog, which ->
-                    gameViewModel.buyItem(item)
+                .setPositiveButton("Sell: ${item.getHalfPrice()}") {dialog, _ ->
+                    gameViewModel.sellItem(item)
+                    dialog.dismiss()
                 }.show()
         }
     }
+
 }

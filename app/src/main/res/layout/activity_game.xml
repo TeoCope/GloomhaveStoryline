@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="mainUser"
+            type="com.example.gloomhavestoryline2.db.entities.Character" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +19,9 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true"
+            android:fitsSystemWindows="true"
             app:layout_constraintTop_toTopOf="parent"
-            android:fitsSystemWindows="true">
+            app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/gameToolbar"
@@ -27,8 +30,43 @@
                 android:minHeight="?attr/actionBarSize"
                 app:layout_scrollEffect="compress"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:menu="@menu/game_top_app_bar_menu"
                 app:title="@string/app_name"
-                app:menu="@menu/game_top_app_bar_menu"/>
+                app:titleTextAppearance="?attr/textAppearanceTitleMedium" />
+
+            <LinearLayout
+                android:id="@+id/mainCharacterWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+                android:background="?attr/colorSurface">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{mainUser.nickname}"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/fragment_horizontal_margin"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{mainUser.fullLevel}"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{mainUser.fullMoney}"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_marginEnd="@dimen/fragment_horizontal_margin"/>
+            </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,10 +75,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            app:showAnimationBehavior="outward"
+            android:visibility="gone"
             app:hideAnimationBehavior="inward"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            android:visibility="gone"/>
+            app:showAnimationBehavior="outward" />
 
         <fragment
             android:id="@+id/nav_host_fragment_game"
@@ -48,17 +86,17 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:layout_constraintTop_toBottomOf="@id/linearProgressIndicator"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+            app:layout_constraintTop_toBottomOf="@id/linearProgressIndicator"
             app:navGraph="@navigation/game_navigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/nav_host_fragment_game"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/game_bottom_navigation_menu"/>
+            app:layout_constraintTop_toBottomOf="@id/nav_host_fragment_game"
+            app:menu="@menu/game_bottom_navigation_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

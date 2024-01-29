@@ -1,14 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.game.PartyFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <variable
+            name="game"
+            type="com.example.gloomhavestoryline2.db.entities.Game" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/party_sheet" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.game.PartyFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/partyRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@id/partyRecyclerView" />
+
+            <TextView
+                android:id="@+id/lableGame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fragment_horizontal_margin"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                android:text="@string/game_info"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/divider" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/lableGame"
+                android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/invite_code"
+                    android:textAppearance="?attr/textAppearanceBodySmall"/>
+
+                <TextView
+                    android:id="@+id/gameID"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{game.id}"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintTop_toBottomOf="@id/lableGame" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout1"
+                android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    android:textAppearance="?attr/textAppearanceBodySmall"/>
+
+                <TextView
+                    android:id="@+id/gameName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@{game.squadName}"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintTop_toBottomOf="@id/gameID" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnInviteFriend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:text="@string/invite_friends"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout2"
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteGame"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+                android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                android:text="@string/delete_game"
+                android:textAppearance="?attr/textAppearanceTitleSmall"
+                app:layout_constraintTop_toBottomOf="@id/btnInviteFriend" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

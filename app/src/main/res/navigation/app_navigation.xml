@@ -20,10 +20,8 @@
         android:name="com.example.gloomhavestoryline2.ui.home.JoinGameFragment"
         android:label="Join game"
         tools:layout="@layout/fragment_join_game">
-
         <argument
             android:name="gameID"/>
-
         <deepLink app:uri="www.gloomhaven.com/{gameID}"/>
     </fragment>
 </navigation>

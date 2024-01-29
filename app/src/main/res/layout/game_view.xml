@@ -34,7 +34,7 @@
             android:layout_below="@id/squadName"
             android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
             android:maxLines="1"
-            android:text="@{game.squadMembers}"
+            android:text="@{game.fullSquadMembers}"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
             android:textStyle="italic" />
 

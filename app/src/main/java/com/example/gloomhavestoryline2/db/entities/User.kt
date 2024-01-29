@@ -13,7 +13,6 @@ data class User(
     val nickname: String = "",
     val games: List<String> = listOf(),
     val completedGames: Int = 0,
-    val matchInProgress: Int = 0,
     val registrationDate: Date = Calendar.getInstance().time,
 ) : Parcelable {
     fun getDate(): String {
@@ -22,5 +21,9 @@ data class User(
         val formattedData: String = dateFormat.format(registrationDate)
 
         return formattedData
+    }
+
+    fun getMatchInProgress(): String{
+        return "${games.size}"
     }
 }

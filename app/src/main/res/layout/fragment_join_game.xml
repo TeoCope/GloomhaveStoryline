@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/edit_text_vertical_margin"
                     android:maxLines="2"
-                    android:text="@{game.squadMembers}"
+                    android:text="@{game.fullSquadMembers}"
                     android:textAppearance="?attr/textAppearanceSubtitle2"
                     app:layout_constraintTop_toBottomOf="@+id/squadName" />
 
