@@ -1,15 +1,19 @@
 package com.example.gloomhavestoryline2.ui.game
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -19,25 +23,38 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.gloomhavestoryline2.MainActivity
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.ActivityGameBinding
-import com.example.gloomhavestoryline2.db.entities.Game
-import com.example.gloomhavestoryline2.other.enum_class.RequestStatus
+import com.example.gloomhavestoryline2.other.listeners.ProgressIndicator
 import com.example.gloomhavestoryline2.other.listeners.ToastMessage
 import com.example.gloomhavestoryline2.ui.home.GAME_ID
 import com.example.gloomhavestoryline2.view_model.GameViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-class GameActivity : AppCompatActivity(), ToastMessage {
+class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
 
     private val TAG = "GAME_ACTIVITY"
 
     private lateinit var binding: ActivityGameBinding
     private lateinit var linearProgressIndicator: LinearProgressIndicator
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_game)
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+            if (windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
+                || windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())) {
+                windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+            } else {
+                windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+            }
+            view.onApplyWindowInsets(windowInsets)
+        }
 
         val gameId = intent.getStringExtra(GAME_ID)
         Log.d(TAG, "$gameId")
@@ -49,6 +66,7 @@ class GameActivity : AppCompatActivity(), ToastMessage {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+        gameViewModel.progressIndicator = this
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_game) as NavHostFragment
@@ -61,6 +79,7 @@ class GameActivity : AppCompatActivity(), ToastMessage {
         setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
+            toolbar.subtitle = null
         }
 
         val bottomNavigation: BottomNavigationView = binding.bottomNavigationView
@@ -100,5 +119,13 @@ class GameActivity : AppCompatActivity(), ToastMessage {
 
             else -> false
         }
+    }
+
+    override fun setVisible() {
+        binding.linearProgressIndicator.visibility = View.VISIBLE
+    }
+
+    override fun setGone() {
+        binding.linearProgressIndicator.visibility = View.GONE
     }
 }

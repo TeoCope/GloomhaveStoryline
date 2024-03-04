@@ -8,49 +8,20 @@
             type="com.example.gloomhavestoryline2.db.entities.Ability" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/abilityWrapper"
-        android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/fragment_vertical_margin">
+        android:background="@color/design_default_color_error"
+        android:layout_margin="@dimen/edit_text_vertical_margin">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img"/>
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="@dimen/fragment_horizontal_margin"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/edit_text_horizontal_margin"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="@{ability.fullLevel}"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/edit_text_horizontal_margin"
-                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-                android:layout_weight="2"
-                android:gravity="center_horizontal"
-                android:text="@{ability.name}"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-        </LinearLayout>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/fragment_horizontal_margin" />
-
-    </LinearLayout>
 </layout>

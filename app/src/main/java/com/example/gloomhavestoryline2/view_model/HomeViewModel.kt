@@ -56,10 +56,6 @@ class HomeViewModel: ViewModel() {
         get() = _searchGameError
 
     init {
-        setUserLogged()
-    }
-
-    private fun setUserLogged(){
         val userID = Firebase.auth.currentUser?.uid
         val userDocumentReference = userID?.let { FirebaseRepository.getUser(it) }
         userDocumentReference?.addSnapshotListener{ user, error ->
@@ -104,15 +100,12 @@ class HomeViewModel: ViewModel() {
     fun dowloadRulebook(){
         viewModelScope.launch {
             StorageRepository.downloadRule()
+            toastMessage?.showToast("Check download repository")
         }
     }
 
     fun newGame(squadName: String, character: String) {
-        val squadNameisValid = validateSquadName(squadName)
-        val characterIsValid = validateCharacter(character)
-        if (!squadNameisValid || !characterIsValid) {
-            return
-        }
+        progressIndicator?.setVisible()
         viewModelScope.launch {
             val result = FirebaseRepository.newGame(squadName, character, userLogged.value!!)
             if (result == null) {
@@ -120,6 +113,7 @@ class HomeViewModel: ViewModel() {
                 return@launch
             }
             _newGameId.value = result!!
+            progressIndicator?.setGone()
         }
     }
 
@@ -151,8 +145,8 @@ class HomeViewModel: ViewModel() {
     fun joinGame(character: String) {
         val gameID = gameResult.value?.id
         val user = userLogged.value
+        progressIndicator?.setVisible()
         viewModelScope.launch {
-            progressIndicator?.setVisible()
             FirebaseRepository.updateGameSquad(gameID!!,user!!,character)
             progressIndicator?.setGone()
         }
@@ -162,36 +156,6 @@ class HomeViewModel: ViewModel() {
     fun lostFocus(){
         _searchGameError.value = null
         _gameResult.value = null
-    }
-
-    private fun validateSquadName(squadName: String): Boolean{
-        return when {
-            squadName.isEmpty() -> {
-                _squadNameError.value = R.string.empty_field
-                false
-            }
-            squadName.length < 3 -> {
-                _squadNameError.value = R.string.error_too_short
-                false
-            }
-            else -> {
-                _squadNameError.value = null
-                true
-            }
-        }
-    }
-
-    private fun validateCharacter(character: String): Boolean{
-        return when {
-            character.isEmpty() -> {
-                _characterError.value = R.string.empty_field
-                false
-            }
-            else -> {
-                _characterError.value = null
-                true
-            }
-        }
     }
 
     private fun gameIdValidation(gameID: String): Boolean{

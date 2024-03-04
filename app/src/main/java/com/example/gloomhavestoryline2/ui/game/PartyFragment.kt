@@ -36,7 +36,7 @@ class PartyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView = binding.partyRecyclerView
-        val adapter = SquadListAdapter(emptyList())
+        val adapter = SquadListAdapter(emptyList(),requireContext())
         recyclerView.adapter = adapter
 
         val userID = Firebase.auth.uid
@@ -54,7 +54,7 @@ class PartyFragment : Fragment() {
         val btnDeleteGame = binding.btnDeleteGame
         btnDeleteGame.setOnClickListener {
             deleteGame()
-
+            it.isEnabled = false
         }
     }
 

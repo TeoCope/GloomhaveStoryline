@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.game.GameActivity">
@@ -24,6 +25,7 @@
             app:liftOnScroll="true">
 
             <com.google.android.material.appbar.MaterialToolbar
+                style="@style/Widget.App.Toolbar"
                 android:id="@+id/gameToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,8 +33,7 @@
                 app:layout_scrollEffect="compress"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/game_top_app_bar_menu"
-                app:title="@string/app_name"
-                app:titleTextAppearance="?attr/textAppearanceTitleMedium" />
+                app:title="@string/app_name" />
 
             <LinearLayout
                 android:id="@+id/mainCharacterWrapper"

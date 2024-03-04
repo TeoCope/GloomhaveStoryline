@@ -7,7 +7,8 @@ data class Item(
     val effect: String = "",
     val cost: Int = 0,
     val avail: Int = 0,
-    val slot: String = ""
+    val slot: String = "",
+    val image: String = ""
 ) {
     fun getFullName(): String{
         return "#$number $name"
@@ -18,7 +19,7 @@ data class Item(
     }
 
     fun getHalfPrice(): String{
-        return "${cost/2}$"
+        return "Sell: ${cost/2}$"
     }
 
     fun getAvailNumber(): String{

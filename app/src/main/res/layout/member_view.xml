@@ -32,17 +32,20 @@
                     android:id="@+id/characterName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{character.fullName}" />
+                    android:text="@{character.fullName}"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{character.fullLevel}" />
+                    android:text="@{character.fullLevel}"
+                    android:textStyle="italic"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{character.fullMoney}" />
+                    android:text="@{character.fullMoney}"
+                    android:textStyle="italic"/>
 
             </LinearLayout>
 
@@ -50,8 +53,7 @@
                 android:id="@+id/charactherImage"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/img"
-                android:scaleType="centerCrop"/>
+                android:src="@drawable/img" />
 
         </LinearLayout>
 

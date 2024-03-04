@@ -269,22 +269,27 @@ object FirebaseRepository {
         }
     }
 
-    suspend fun deleteGame(gameID: String?, squad: List<Character>?) {
+    suspend fun deleteGame(
+        gameID: String?,
+        squad: List<Character>?,
+        items: List<Item>?,
+        missions: List<Mission>?
+    ) {
         try {
-            firestoreDB.collection("games").document(gameID!!).delete().await()
+            for (item in items!!){
+                firestoreDB.collection("games").document(gameID!!).collection("items").document(item.name).delete().await()
+            }
+            for (mission in missions!!){
+                firestoreDB.collection("games").document(gameID!!).collection("missions").document(mission.name).delete().await()
+            }
             for (member in squad!!){
                 firestoreDB.collection("users").document(member.id).update("games",FieldValue.arrayRemove(gameID)).await()
+                firestoreDB.collection("games").document(gameID!!).collection("squad").document(member.id).delete().await()
             }
+            firestoreDB.collection("games").document(gameID!!).update("isEnd",true).await()
+            firestoreDB.collection("games").document(gameID!!).delete().await()
         } catch (e: Exception) {
             Log.e(TAG, "Failure to delete game",e)
-        }
-    }
-
-    suspend fun setGameEnd(gameID: String?) {
-        try {
-            firestoreDB.collection("games").document(gameID!!).update("isEnd",true).await()
-        } catch (e: Exception) {
-            Log.e(TAG, "Failure to set game end")
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentShopBinding
 import com.example.gloomhavestoryline2.db.entities.Item
@@ -33,10 +34,10 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = binding.shopRecyclerView
-        val adapter = ItemListAdapter(emptyList()) {item: Item -> onClick(item) }
+        val adapter = ItemListAdapter(emptyList(),requireContext()) {item: Item -> onClick(item) }
 
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         gameViewModel.items.observe(viewLifecycleOwner) {newItemList: List<Item> ->
             adapter.updateList(newItemList.filter { it.avail > 0 }.sortedBy { it.number })

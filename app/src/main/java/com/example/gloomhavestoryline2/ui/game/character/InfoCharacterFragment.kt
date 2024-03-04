@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentInfoCharacterBinding
 import com.example.gloomhavestoryline2.view_model.GameViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class InfoCharacterFragment : Fragment() {
 
@@ -27,6 +29,8 @@ class InfoCharacterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = "Info"
 
         gameViewModel.characterMain.observe(viewLifecycleOwner) {
             binding.character = it
@@ -58,6 +62,11 @@ class InfoCharacterFragment : Fragment() {
                 experienceInputLayout.editText?.text?.clear()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+            activity?.supportFragmentManager?.popBackStack(R.layout.fragment_info_character,FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
 }

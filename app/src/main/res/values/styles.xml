@@ -1,4 +1,13 @@
 <resources>
+    <!-- Top app bar style -->
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.App.Subtitle</item>
+    </style>
 
-
+    <style name="TextAppearance.App.Subtitle" parent="TextAppearance.Material3.ActionBar.Subtitle">
+        <item name="android:fontFamily">@font/modern_antiqua_regular</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>
