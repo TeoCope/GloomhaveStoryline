@@ -66,7 +66,7 @@ class InfoCharacterFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-            activity?.supportFragmentManager?.popBackStack(R.layout.fragment_info_character,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = null
     }
 
 }

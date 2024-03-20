@@ -79,4 +79,9 @@ class ItemsCharacterFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = null
+    }
+
 }

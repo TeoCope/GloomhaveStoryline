@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shop"
+    app:startDestination="@id/shopItems">
+
+    <fragment
+        android:id="@+id/shopItems"
+        android:name="com.example.gloomhavestoryline2.ui.game.ShopFragment"
+        tools:layout="@layout/fragment_shop" />
+
+</navigation>

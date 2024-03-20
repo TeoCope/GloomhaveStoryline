@@ -89,7 +89,7 @@
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
             app:layout_constraintTop_toBottomOf="@id/linearProgressIndicator"
-            app:navGraph="@navigation/game_navigation" />
+            app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"

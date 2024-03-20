@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/character"
+    app:startDestination="@id/charactherSheet">
+
+    <fragment
+        android:id="@+id/charactherSheet"
+        android:name="com.example.gloomhavestoryline2.ui.game.CharactherFragment"
+        tools:layout="@layout/fragment_characther" >
+        <action
+            android:id="@+id/action_characther_to_infoCharacterFragment"
+            app:destination="@id/infoCharacter" />
+        <action
+            android:id="@+id/action_characther_to_abilitiesCharacterFragment"
+            app:destination="@id/abilitiesCharacter" />
+        <action
+            android:id="@+id/action_characther_to_itemsCharacterFragment"
+            app:destination="@id/itemsCharacter" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.InfoCharacterFragment"
+        tools:layout="@layout/fragment_info_character" />
+    <fragment
+        android:id="@+id/abilitiesCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.AbilitiesCharacterFragment"
+        tools:layout="@layout/fragment_abilities_character" />
+    <fragment
+        android:id="@+id/itemsCharacter"
+        android:name="com.example.gloomhavestoryline2.ui.game.character.ItemsCharacterFragment"
+        tools:layout="@layout/fragment_items_character" />
+
+</navigation>

@@ -11,7 +11,7 @@
         android:icon="@drawable/shopping_icon"
         android:enabled="true"/>
     <item
-        android:id="@+id/characther"
+        android:id="@+id/character"
         android:title="@string/character"
         android:icon="@drawable/king_icon"
         android:enabled="true"/>

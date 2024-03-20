@@ -76,7 +76,10 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_game) as NavHostFragment
         navController = navHostFragment.navController
         appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.storyline, R.id.shop, R.id.characther, R.id.party))
+            AppBarConfiguration(setOf(R.id.storyline, R.id.shop, R.id.character, R.id.party))
+
+        val bottomNavigation: BottomNavigationView = binding.bottomNavigationView
+        bottomNavigation.setupWithNavController(navController)
 
         val toolbar = binding.gameToolbar
         setSupportActionBar(toolbar)
@@ -85,9 +88,6 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
             onBackPressed()
             toolbar.subtitle = null
         }
-
-        val bottomNavigation: BottomNavigationView = binding.bottomNavigationView
-        bottomNavigation.setupWithNavController(navController)
 
         gameViewModel.toastMessage = this
 
@@ -102,6 +102,10 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
                 finish()
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
     }
 
     override fun showToast(message: String) {

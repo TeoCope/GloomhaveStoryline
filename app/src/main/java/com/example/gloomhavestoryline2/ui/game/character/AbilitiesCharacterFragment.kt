@@ -56,4 +56,9 @@ class AbilitiesCharacterFragment : Fragment() {
             adapter.updateAdapter(it.abilities.filter { it.level <= userLevel!! }.sortedBy { it.level })
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = null
+    }
 }
