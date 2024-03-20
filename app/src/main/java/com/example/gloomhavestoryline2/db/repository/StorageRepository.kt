@@ -27,6 +27,7 @@ object StorageRepository {
     }
 
     fun uploadUserImage(userId: String, imageUri: Uri) {
+        storage.reference.child("users_image/$userId").delete()
         storage.reference.child("users_image/$userId").putFile(imageUri)
     }
 

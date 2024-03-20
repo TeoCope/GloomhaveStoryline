@@ -32,7 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
+class MainActivity : AppCompatActivity(), ToastMessage {
 
     private val TAG = "MAIN_ACTIVITY"
 
@@ -62,14 +62,13 @@ class MainActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
         val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         homeViewModel.toastMessage = this
-        homeViewModel.progressIndicator = this
+//        homeViewModel.progressIndicator = this
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         val navController = navHostFragment.navController
 
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         setSupportActionBar(toolbar)
-
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigation.setupWithNavController(navController)
@@ -78,6 +77,18 @@ class MainActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
             homeViewModel.setGameList(newUser.games)
         }
         homeViewModel.userLogged.observe(this,userObserver)
+
+        val statusObserver = Observer<RequestStatus> { newStatus ->
+            when(newStatus) {
+                RequestStatus.LOADING -> {
+                    setVisible()
+                }
+                else -> {
+                    setGone()
+                }
+            }
+        }
+        homeViewModel.status.observe(this,statusObserver)
 
     }
 
@@ -94,11 +105,11 @@ class MainActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun setVisible() {
+    fun setVisible() {
         findViewById<LinearProgressIndicator>(R.id.linearProgressIndicator).visibility = View.VISIBLE
     }
 
-    override fun setGone() {
+    fun setGone() {
         findViewById<LinearProgressIndicator>(R.id.linearProgressIndicator).visibility = View.GONE
     }
 }

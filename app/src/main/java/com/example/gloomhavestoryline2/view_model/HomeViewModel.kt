@@ -18,7 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
     private val TAG = "HOME_VIEW_MODEL"
     var toastMessage: ToastMessage? = null
     var progressIndicator: ProgressIndicator? = null
@@ -58,13 +58,13 @@ class HomeViewModel: ViewModel() {
     init {
         val userID = Firebase.auth.currentUser?.uid
         val userDocumentReference = userID?.let { FirebaseRepository.getUser(it) }
-        userDocumentReference?.addSnapshotListener{ user, error ->
+        userDocumentReference?.addSnapshotListener { user, error ->
             if (error != null) {
                 Log.e(TAG, "User listen failed", error)
                 return@addSnapshotListener
             }
 
-            if (user != null && user.exists()){
+            if (user != null && user.exists()) {
                 _userLogged.value = user.toObject(User::class.java)
             } else {
                 Log.d(TAG, "Current user data: null")
@@ -81,7 +81,7 @@ class HomeViewModel: ViewModel() {
     fun deleteAccount() {
         _status.value = RequestStatus.LOADING
         viewModelScope.launch {
-            if (FirebaseRepository.deleteUser(userLogged.value?.id!!)){
+            if (FirebaseRepository.deleteUser(userLogged.value?.id!!)) {
                 Log.d(TAG, "Inizio eliminazione utente: ${status.value}")
                 try {
                     AuthRepository().deleteUser()
@@ -97,7 +97,7 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    fun dowloadRulebook(){
+    fun dowloadRulebook() {
         viewModelScope.launch {
             StorageRepository.downloadRule()
             toastMessage?.showToast("Check download repository")
@@ -105,31 +105,35 @@ class HomeViewModel: ViewModel() {
     }
 
     fun newGame(squadName: String, character: String) {
-        progressIndicator?.setVisible()
+        _status.value = RequestStatus.LOADING
+//      progressIndicator?.setVisible()
         viewModelScope.launch {
             val result = FirebaseRepository.newGame(squadName, character, userLogged.value!!)
             if (result == null) {
                 toastMessage?.showToast("Something went wront!")
+                _status.value = RequestStatus.ERROR
+//                progressIndicator?.setGone()
                 return@launch
             }
             _newGameId.value = result!!
-            progressIndicator?.setGone()
+            _status.value = RequestStatus.DONE
+//            progressIndicator?.setGone()
         }
     }
 
-    fun searchGame(gameID: String){
+    fun searchGame(gameID: String) {
         if (!gameIdValidation(gameID)) {
             return
         }
         val result = FirebaseRepository.getGame(gameID)
         result?.addSnapshotListener { snapshot, error ->
             if (error != null) {
-                Log.e(TAG, "Error load game",error)
+                Log.e(TAG, "Error load game", error)
                 return@addSnapshotListener
             }
             if (snapshot != null && snapshot.exists()) {
                 val game = snapshot.toObject(Game::class.java)
-                if (game?.charactersAvailable?.size == 0){
+                if (game?.charactersAvailable?.size == 0) {
                     _searchGameError.value = R.string.full_party
                     return@addSnapshotListener
                 }
@@ -147,27 +151,29 @@ class HomeViewModel: ViewModel() {
         val user = userLogged.value
         progressIndicator?.setVisible()
         viewModelScope.launch {
-            FirebaseRepository.updateGameSquad(gameID!!,user!!,character)
+            FirebaseRepository.updateGameSquad(gameID!!, user!!, character)
             progressIndicator?.setGone()
         }
     }
 
 
-    fun lostFocus(){
+    fun lostFocus() {
         _searchGameError.value = null
         _gameResult.value = null
     }
 
-    private fun gameIdValidation(gameID: String): Boolean{
+    private fun gameIdValidation(gameID: String): Boolean {
         return when {
             gameID.isEmpty() -> {
                 _searchGameError.value = R.string.empty_field
                 false
             }
+
             userLogged.value?.games?.contains(gameID) == true -> {
                 _searchGameError.value = R.string.alredy_logged
                 false
             }
+
             else -> true
         }
     }

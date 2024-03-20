@@ -16,8 +16,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.gloomhavestoryline2.MainActivity
@@ -36,6 +38,8 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
 
     private lateinit var binding: ActivityGameBinding
     private lateinit var linearProgressIndicator: LinearProgressIndicator
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,8 +74,8 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_game) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration =
+        navController = navHostFragment.navController
+        appBarConfiguration =
             AppBarConfiguration(setOf(R.id.storyline, R.id.shop, R.id.characther, R.id.party))
 
         val toolbar = binding.gameToolbar

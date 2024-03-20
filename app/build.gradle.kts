@@ -73,6 +73,8 @@ dependencies {
 //    annotationProcessor("com.github.bumptech.glide:glide:4.16.0")
     kapt ("com.github.bumptech.glide:compiler:4.14.2")
 
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.28")
+
     testImplementation("junit:junit:4.13.2")
 
     // Testing Navigation

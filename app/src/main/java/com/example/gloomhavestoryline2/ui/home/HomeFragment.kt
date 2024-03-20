@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentHomeBinding
 import com.example.gloomhavestoryline2.db.entities.Game
+import com.example.gloomhavestoryline2.other.enum_class.RequestStatus
 import com.example.gloomhavestoryline2.ui.adapter.GameListAdapter
 import com.example.gloomhavestoryline2.ui.game.GameActivity
 import com.example.gloomhavestoryline2.view_model.HomeViewModel
@@ -76,19 +77,37 @@ class HomeFragment : Fragment() {
             val squadName = editText.editText?.text.toString().trim()
             val character = dropdownMenu.editText?.text.toString().trim()
             if (validateSquadName(squadName) or validateCharacter(character)) {
-                binding.fabNewGame.isEnabled = false
+                //binding.fabNewGame.isEnabled = false
                 dialog.dismiss()
                 homeViewModel.newGame(squadName, character)
             }
         }
 
-        val newGameIdObserver = Observer<String> {newGameId ->
-            val intent = Intent(activity, GameActivity::class.java)
-            intent.putExtra(GAME_ID,newGameId)
-            startActivity(intent)
-            activity?.finish()
+        val statusObserver = Observer<RequestStatus> { newStatus ->
+            when(newStatus) {
+                RequestStatus.LOADING -> {
+                    binding.fabNewGame.isEnabled = false
+                }
+                else -> {
+                    binding.fabNewGame.isEnabled = true
+                    if (newStatus == RequestStatus.DONE) {
+                        val intent = Intent(activity, GameActivity::class.java)
+                        intent.putExtra(GAME_ID,homeViewModel.newGameId.value)
+                        startActivity(intent)
+                        activity?.finish()
+                    }
+                }
+            }
         }
-        homeViewModel.newGameId.observe(viewLifecycleOwner, newGameIdObserver)
+        homeViewModel.status.observe(this,statusObserver)
+
+//        val newGameIdObserver = Observer<String> {newGameId ->
+//            val intent = Intent(activity, GameActivity::class.java)
+//            intent.putExtra(GAME_ID,newGameId)
+//            startActivity(intent)
+//            activity?.finish()
+//        }
+//        homeViewModel.newGameId.observe(viewLifecycleOwner, newGameIdObserver)
     }
 
     fun newGame() {

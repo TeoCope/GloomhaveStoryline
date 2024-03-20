@@ -12,6 +12,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.game.character.ItemsCharacterFragment">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textViewNoItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_items"
+            android:visibility="gone"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemsRecyclerView"
             android:layout_width="match_parent"

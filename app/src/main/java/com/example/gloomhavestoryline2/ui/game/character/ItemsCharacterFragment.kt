@@ -46,6 +46,15 @@ class ItemsCharacterFragment : Fragment() {
 
         gameViewModel.characterMain.observe(viewLifecycleOwner) { it ->
             adapter.updateAdapter(it.items.sortedBy { it.number })
+            if (it.items.isNotEmpty()){
+                binding.textViewNoItems.visibility = View.GONE
+                binding.itemsRecyclerView.visibility = View.VISIBLE
+            }
+            else {
+                binding.textViewNoItems.visibility = View.VISIBLE
+                binding.itemsRecyclerView.visibility = View.GONE
+            }
+
         }
     }
 
@@ -62,6 +71,10 @@ class ItemsCharacterFragment : Fragment() {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setView(view.root)
+                .setPositiveButton(item.getHalfPrice()) {dialog,_ ->
+                    gameViewModel.sellItem(item)
+                    dialog.dismiss()
+                }
                 .show()
         }
     }

@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -28,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class ProfileFragment : Fragment() {
 
@@ -58,17 +60,26 @@ class ProfileFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val userImageView = binding.imageViewUser
-        val imageReference = Firebase.auth.currentUser?.uid?.let {
-            StorageRepository.downloadUserImage(
-                it
-            )
-        }
+//        val imageReference = Firebase.auth.currentUser?.uid?.let {
+//            StorageRepository.downloadUserImage(
+//                it
+//            )
+//        }
+//
+//        Log.d(TAG, "image reference: ${imageReference?.name}")
 
         Glide.with(requireContext())
-            .load(imageReference)
-            .circleCrop()
-            .error(R.drawable.default_user)
-            .into(userImageView)
+            .load("https://www.google.com/images/spin-32.gif")
+            .into(binding.imageViewUser)
+
+        Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").downloadUrl
+            .addOnCompleteListener { uri ->
+                Glide.with(requireContext())
+                    .load(uri)
+                    .circleCrop()
+                    .error(R.drawable.default_user)
+                    .into(userImageView)
+            }
 
         userImageView.setOnClickListener {
             val intent = Intent()
@@ -143,10 +154,20 @@ class ProfileFragment : Fragment() {
         if (requestCode == 1 && resultCode==RESULT_OK && data!= null && data.data != null) {
             imageUri = data.data!!
             Glide.with(requireContext())
-                .load(imageUri)
+                .load("https://www.google.com/images/spin-32.gif")
                 .into(binding.imageViewUser)
 
-            StorageRepository.uploadUserImage(Firebase.auth.currentUser?.uid!!,imageUri)
+            Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").putFile(imageUri)
+                .addOnCompleteListener {
+                    Glide.with(requireContext())
+                        .load(imageUri)
+                        .circleCrop()
+                        .error(R.drawable.default_user)
+                        .into(binding.imageViewUser)
+                }
+                .addOnFailureListener{
+                    Log.d(TAG,"Errore caricamento foto")
+                }
         }
     }
 }

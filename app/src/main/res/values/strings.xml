@@ -151,4 +151,5 @@
     <string name="game_info">Game info</string>
     <string name="invite_code">Invite code:</string>
     <string name="name">Name:</string>
+    <string name="no_items">No Items</string>
 </resources>
