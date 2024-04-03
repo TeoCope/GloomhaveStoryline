@@ -37,8 +37,6 @@ class ItemsCharacterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = "Items"
-
         val recyclerView = binding.itemsRecyclerView
         val adapter =
             ItemCharacterListAdapter(emptyList(), requireContext()) { item -> onItemClick(item) }

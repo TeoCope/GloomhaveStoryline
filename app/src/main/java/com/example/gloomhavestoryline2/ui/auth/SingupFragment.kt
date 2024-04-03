@@ -90,7 +90,7 @@ class SingupFragment : Fragment(), ProgressIndicator, ToastMessage {
         val email = binding.emailEditText.editText?.text.toString().trim()
         val password = binding.passwordEditText.editText?.text.toString().trim()
 
-        authViewModel.singup(nickname,email,password)
+        authViewModel.singUp(nickname,email,password)
     }
 
     override fun setVisible() {
@@ -101,7 +101,7 @@ class SingupFragment : Fragment(), ProgressIndicator, ToastMessage {
         activity?.findViewById<LinearProgressIndicator>(R.id.linearProgressIndicator)?.visibility = View.GONE
     }
 
-    override fun showToast(message: String) {
+    override fun showSnackbar(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 }

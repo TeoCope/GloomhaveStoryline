@@ -1,6 +1,8 @@
 package com.example.gloomhavestoryline2.view_model
 
+import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +18,10 @@ import com.example.gloomhavestoryline2.other.listeners.ProgressIndicator
 import com.example.gloomhavestoryline2.other.listeners.ToastMessage
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
     private val TAG = "HOME_VIEW_MODEL"
@@ -26,6 +31,9 @@ class HomeViewModel : ViewModel() {
     private val _status: MutableLiveData<RequestStatus> = MutableLiveData()
     val status: LiveData<RequestStatus>
         get() = _status
+    private val _requestCode: MutableLiveData<Int> = MutableLiveData()
+    val requestCode: LiveData<Int>
+        get() = _requestCode
 
     private val _userLogged: MutableLiveData<User> = MutableLiveData()
     val userLogged: LiveData<User>
@@ -42,6 +50,10 @@ class HomeViewModel : ViewModel() {
     private val _newGameId: MutableLiveData<String> = MutableLiveData()
     val newGameId: LiveData<String>
         get() = _newGameId
+
+    private val _uri: MutableLiveData<Uri> = MutableLiveData()
+    val uri: LiveData<Uri>
+        get() = _uri
 
     private val _squadNameError: MutableLiveData<Int?> = MutableLiveData()
     val squadNameError: LiveData<Int?>
@@ -70,6 +82,20 @@ class HomeViewModel : ViewModel() {
                 Log.d(TAG, "Current user data: null")
             }
         }
+        viewModelScope.launch{
+            _status.value = RequestStatus.LOADING
+            withContext(Dispatchers.IO){
+                Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").downloadUrl
+                    .addOnSuccessListener {
+                        _uri.value = it
+                        _status.value = RequestStatus.DONE
+                    }
+                    .addOnFailureListener {
+                        _uri.value = "".toUri()
+                        _status.value = RequestStatus.ERROR
+                    }
+            }
+        }
     }
 
     fun setGameList(gamesId: List<String>) {
@@ -80,6 +106,7 @@ class HomeViewModel : ViewModel() {
 
     fun deleteAccount() {
         _status.value = RequestStatus.LOADING
+        _requestCode.value = 2
         viewModelScope.launch {
             if (FirebaseRepository.deleteUser(userLogged.value?.id!!)) {
                 Log.d(TAG, "Inizio eliminazione utente: ${status.value}")
@@ -88,7 +115,7 @@ class HomeViewModel : ViewModel() {
                     _status.value = RequestStatus.DONE
                     Log.d(TAG, "Utente eliminato: ${status.value}")
                 } catch (e: Exception) {
-                    toastMessage?.showToast("Something went wrong!")
+                    toastMessage?.showSnackbar("Something went wrong!")
                     Log.d(TAG, "Error to delete ${userLogged.value}")
                     _status.value = RequestStatus.ERROR
                     Log.d(TAG, "Errore eliminazione utente: ${status.value}")
@@ -100,24 +127,22 @@ class HomeViewModel : ViewModel() {
     fun dowloadRulebook() {
         viewModelScope.launch {
             StorageRepository.downloadRule()
-            toastMessage?.showToast("Check download repository")
+            toastMessage?.showSnackbar("Check download repository")
         }
     }
 
     fun newGame(squadName: String, character: String) {
         _status.value = RequestStatus.LOADING
-//      progressIndicator?.setVisible()
+        _requestCode.value = 0
         viewModelScope.launch {
             val result = FirebaseRepository.newGame(squadName, character, userLogged.value!!)
             if (result == null) {
-                toastMessage?.showToast("Something went wront!")
+                toastMessage?.showSnackbar("Something went wront!")
                 _status.value = RequestStatus.ERROR
-//                progressIndicator?.setGone()
                 return@launch
             }
             _newGameId.value = result!!
             _status.value = RequestStatus.DONE
-//            progressIndicator?.setGone()
         }
     }
 
@@ -175,6 +200,24 @@ class HomeViewModel : ViewModel() {
             }
 
             else -> true
+        }
+    }
+
+    fun setUserImage(imageUri: Uri){
+        _status.value = RequestStatus.LOADING
+        _requestCode.value = 1
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").putFile(imageUri)
+                    .addOnSuccessListener {
+                        _uri.value = imageUri
+                        _status.value = RequestStatus.DONE
+                    }
+                    .addOnFailureListener{
+                        _uri.value = "".toUri()
+                        _status.value = RequestStatus.ERROR
+                    }
+            }
         }
     }
 }

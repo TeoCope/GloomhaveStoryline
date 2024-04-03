@@ -7,43 +7,49 @@
 
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnInfo"
-            style="@style/Widget.Material3.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/info"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            app:icon="@drawable/info_icon"
-            app:iconSize="30dp" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAbilities"
-            style="@style/Widget.Material3.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/abilities"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:layout_marginTop="@dimen/edit_text_vertical_margin"
-            app:icon="@drawable/playing_cards_icon"
-            app:iconSize="30dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnInfo"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/info"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:icon="@drawable/info_icon"
+                app:iconSize="30dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnItems"
-            style="@style/Widget.Material3.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/edit_text_vertical_margin"
-            android:text="@string/items"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            app:icon="@drawable/items_icon"
-            app:iconSize="30dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAbilities"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                android:text="@string/abilities"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:icon="@drawable/playing_cards_icon"
+                app:iconSize="30dp" />
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnItems"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/edit_text_vertical_margin"
+                android:text="@string/items"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:icon="@drawable/items_icon"
+                app:iconSize="30dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </layout>

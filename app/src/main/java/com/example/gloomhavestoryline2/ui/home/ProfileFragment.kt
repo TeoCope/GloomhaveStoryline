@@ -1,8 +1,11 @@
 package com.example.gloomhavestoryline2.ui.home
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,19 +16,25 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentProfileBinding
 import com.example.gloomhavestoryline2.db.entities.User
-import com.example.gloomhavestoryline2.db.repository.StorageRepository
 import com.example.gloomhavestoryline2.other.enum_class.RequestStatus
 import com.example.gloomhavestoryline2.other.resetPassword
 import com.example.gloomhavestoryline2.ui.auth.AuthActivity
 import com.example.gloomhavestoryline2.view_model.HomeViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -34,10 +43,12 @@ import com.google.firebase.storage.ktx.storage
 class ProfileFragment : Fragment() {
 
     private val TAG = "PROFILE_FRAGMENT"
+    private val PERMISSION_REQUEST_STORAGE = 0
 
     private lateinit var binding: FragmentProfileBinding
     private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var imageUri: Uri
+    private lateinit var layout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,32 +71,48 @@ class ProfileFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val userImageView = binding.imageViewUser
-//        val imageReference = Firebase.auth.currentUser?.uid?.let {
-//            StorageRepository.downloadUserImage(
-//                it
-//            )
-//        }
-//
-//        Log.d(TAG, "image reference: ${imageReference?.name}")
 
-        Glide.with(requireContext())
-            .load("https://www.google.com/images/spin-32.gif")
-            .into(binding.imageViewUser)
+        val uriObserver = Observer<Uri> { newUri ->
+            Glide.with(requireContext())
+                .load(newUri)
+                .circleCrop()
+                .error(R.drawable.default_user)
+                .into(userImageView)
+        }
+        homeViewModel.uri.observe(viewLifecycleOwner, uriObserver)
 
-        Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").downloadUrl
-            .addOnCompleteListener { uri ->
-                Glide.with(requireContext())
-                    .load(uri)
-                    .circleCrop()
-                    .error(R.drawable.default_user)
-                    .into(userImageView)
+        val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    launchNewPhotoPicker()
+                } else {
+                    Toast.makeText(context, "Please grant permission", Toast.LENGTH_LONG).show()
+
+                }
             }
 
         userImageView.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(intent,1)
+            val permission =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Manifest.permission.READ_MEDIA_IMAGES
+                } else {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
+            when {
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    permission
+                ) -> {
+                    Snackbar.make(requireView(), getString(R.string.permission_required), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Ok") {
+                            requestPermissionLauncher.launch(permission)
+                        }
+                        .show()
+                }
+                else -> {
+                    requestPermissionLauncher.launch(permission)
+                }
+            }
         }
 
         val userObserver = Observer<User> { newUser ->
@@ -94,14 +121,26 @@ class ProfileFragment : Fragment() {
         homeViewModel.userLogged.observe(viewLifecycleOwner, userObserver)
 
         val statusObserver = Observer<RequestStatus> { newRequest ->
-            when {
-                newRequest == RequestStatus.DONE -> {
-                    startActivity(Intent(context, AuthActivity::class.java))
-                    activity?.finish()
+            when (newRequest) {
+                RequestStatus.LOADING -> {
+                    userImageView.isEnabled = false
                 }
 
-                newRequest == RequestStatus.ERROR -> {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                RequestStatus.DONE -> {
+                    if (homeViewModel.requestCode.value == 1) {
+                        userImageView.isEnabled = true
+                    } else if (homeViewModel.requestCode.value == 2) {
+                        startActivity(Intent(context, AuthActivity::class.java))
+                        activity?.finish()
+                    }
+                }
+
+                RequestStatus.ERROR -> {
+                    if (homeViewModel.requestCode.value == 1) {
+                        userImageView.isEnabled = true
+                    } else if (homeViewModel.requestCode.value == 2) {
+                        Snackbar.make(layout,getString(R.string.error),Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -123,12 +162,12 @@ class ProfileFragment : Fragment() {
         return when (item.itemId) {
             R.id.resetPassword -> {
                 resetPassword(user?.email!!)
-                Toast.makeText(context, "Check your email address", Toast.LENGTH_SHORT).show()
+                Snackbar.make(layout, "Check your email address", Snackbar.LENGTH_SHORT).show()
                 true
             }
 
             R.id.deleteAccount -> {
-                buildAllertDialog()
+                buildAlertDialog()
                 true
             }
 
@@ -136,7 +175,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun buildAllertDialog() {
+    private fun buildAlertDialog() {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setTitle("Delete Account")
@@ -149,25 +188,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode==RESULT_OK && data!= null && data.data != null) {
-            imageUri = data.data!!
-            Glide.with(requireContext())
-                .load("https://www.google.com/images/spin-32.gif")
-                .into(binding.imageViewUser)
-
-            Firebase.storage.reference.child("users_image/${Firebase.auth.currentUser?.uid}").putFile(imageUri)
-                .addOnCompleteListener {
-                    Glide.with(requireContext())
-                        .load(imageUri)
-                        .circleCrop()
-                        .error(R.drawable.default_user)
-                        .into(binding.imageViewUser)
-                }
-                .addOnFailureListener{
-                    Log.d(TAG,"Errore caricamento foto")
-                }
-        }
+    private fun launchNewPhotoPicker() {
+        newPhotoPiker.launch("image/*")
     }
+
+    private val newPhotoPiker =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                homeViewModel.setUserImage(it)
+            }
+        }
 }

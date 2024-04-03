@@ -1,7 +1,6 @@
 package com.example.gloomhavestoryline2.db.repository
 
 import android.util.Log
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
@@ -21,7 +20,7 @@ class AuthRepository {
            }
     }
 
-    suspend fun singup(nickname: String, email: String, password: String): Boolean {
+    suspend fun singUp(nickname: String, email: String, password: String): Boolean {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             FirebaseRepository.newUser(result.user?.uid!!,nickname,email)

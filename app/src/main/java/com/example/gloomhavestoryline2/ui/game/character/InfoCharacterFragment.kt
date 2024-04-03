@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.example.gloomhavestoryline2.R
 import com.example.gloomhavestoryline2.databinding.FragmentInfoCharacterBinding
@@ -29,8 +28,6 @@ class InfoCharacterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = "Info"
 
         gameViewModel.characterMain.observe(viewLifecycleOwner) {
             binding.character = it
@@ -57,7 +54,7 @@ class InfoCharacterFragment : Fragment() {
                 experienceInputLayout.error = null
             }
             if (check) {
-                gameViewModel.assignUser(money,experience)
+                gameViewModel.assignRewards(money,experience)
                 moneyInputLayout.editText?.text?.clear()
                 experienceInputLayout.editText?.text?.clear()
             }

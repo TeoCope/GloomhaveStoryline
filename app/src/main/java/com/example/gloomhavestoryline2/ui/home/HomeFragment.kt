@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
             val squadName = editText.editText?.text.toString().trim()
             val character = dropdownMenu.editText?.text.toString().trim()
             if (validateSquadName(squadName) or validateCharacter(character)) {
-                //binding.fabNewGame.isEnabled = false
                 dialog.dismiss()
                 homeViewModel.newGame(squadName, character)
             }
@@ -90,7 +89,7 @@ class HomeFragment : Fragment() {
                 }
                 else -> {
                     binding.fabNewGame.isEnabled = true
-                    if (newStatus == RequestStatus.DONE) {
+                    if (newStatus == RequestStatus.DONE && homeViewModel.requestCode.value == 0) {
                         val intent = Intent(activity, GameActivity::class.java)
                         intent.putExtra(GAME_ID,homeViewModel.newGameId.value)
                         startActivity(intent)
@@ -99,15 +98,8 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        homeViewModel.status.observe(this,statusObserver)
+        homeViewModel.status.observe(viewLifecycleOwner,statusObserver)
 
-//        val newGameIdObserver = Observer<String> {newGameId ->
-//            val intent = Intent(activity, GameActivity::class.java)
-//            intent.putExtra(GAME_ID,newGameId)
-//            startActivity(intent)
-//            activity?.finish()
-//        }
-//        homeViewModel.newGameId.observe(viewLifecycleOwner, newGameIdObserver)
     }
 
     fun newGame() {

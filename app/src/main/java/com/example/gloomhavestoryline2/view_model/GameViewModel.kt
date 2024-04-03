@@ -122,7 +122,7 @@ class GameViewModel : ViewModel() {
 
     fun gameCompleted(){
         val userID = characterMain.value?.id
-        toastMessage?.showToast("Game completed")
+        toastMessage?.showSnackbar("You won")
         viewModelScope.launch {
             FirebaseRepository.gameCompleted(userID)
         }
@@ -132,7 +132,7 @@ class GameViewModel : ViewModel() {
         val userID = characterMain.value?.id
         val gameID = game.value?.id
         if (characterMain.value?.money!! < item.cost){
-            toastMessage?.showToast("You do not have enough money")
+            toastMessage?.showSnackbar("You do not have enough money")
             return
         }
         viewModelScope.launch {
@@ -140,7 +140,7 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun assignUser(import: String, value: String) {
+    fun assignRewards(import: String, value: String) {
         val money = import.toDouble()
         var experience = value.toDouble()
         var levelUp = false

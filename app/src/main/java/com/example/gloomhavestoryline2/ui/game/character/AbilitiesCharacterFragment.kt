@@ -39,8 +39,6 @@ class AbilitiesCharacterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<MaterialToolbar>(R.id.gameToolbar)?.subtitle = "Abilities"
-
         val recyclerView = binding.abilitiesRecyclerView
         val adapter = AbilitiesListAdapter(emptyList(),requireContext())
         recyclerView.adapter = adapter

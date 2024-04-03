@@ -39,8 +39,6 @@ class JoinGameFragment : Fragment(), ProgressIndicator {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val  backStack = activity?.supportFragmentManager
-
         binding.homeViewModel = homeViewModel
         binding.joinGameFragment = this
 

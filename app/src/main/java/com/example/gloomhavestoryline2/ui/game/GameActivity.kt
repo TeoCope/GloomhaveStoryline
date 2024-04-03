@@ -31,10 +31,12 @@ import com.example.gloomhavestoryline2.ui.home.GAME_ID
 import com.example.gloomhavestoryline2.view_model.GameViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 
 class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
 
     private val TAG = "GAME_ACTIVITY"
+    private lateinit var layout: View
 
     private lateinit var binding: ActivityGameBinding
     private lateinit var linearProgressIndicator: LinearProgressIndicator
@@ -71,6 +73,7 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
             finish()
         }
         gameViewModel.progressIndicator = this
+        layout = findViewById(R.id.game_activity)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_game) as NavHostFragment
@@ -108,8 +111,8 @@ class GameActivity : AppCompatActivity(), ToastMessage, ProgressIndicator {
         return navController.navigateUp(appBarConfiguration)
     }
 
-    override fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun showSnackbar(message: String) {
+        Snackbar.make(layout, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

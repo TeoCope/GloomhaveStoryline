@@ -35,7 +35,6 @@ class SquadListAdapter(private var squad: List<Character>,private val context: C
         holder.binding.character = squad[position]
         Glide.with(context)
             .load(StorageRepository.downloadUserImage(squad[position].id))
-            .fitCenter()
             .error(R.drawable.default_user)
             .into(holder.binding.charactherImage)
     }

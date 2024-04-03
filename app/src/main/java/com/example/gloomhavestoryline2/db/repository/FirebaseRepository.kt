@@ -55,20 +55,6 @@ object FirebaseRepository {
         }
     }
 
-    /*suspend fun getAllCharacters(): List<Character> {
-        return try {
-            firestoreDB.collection("characters").get().await().documents.mapNotNull {
-                val name = it.data?.get("name").toString()
-                val abilities = firestoreDB.collection("characters").document(name.lowercase()).collection("abilities").get().await().documents.mapNotNull { it.toObject(Ability::class.java) }
-                Character(name = name, abilities =  abilities)
-            }
-
-        } catch (e: Exception) {
-            Log.e(TAG, "Characters download failure", e)
-            emptyList()
-        }
-    }*/
-
     /* User Collection */
     fun getUser(id: String): DocumentReference? {
         return try {

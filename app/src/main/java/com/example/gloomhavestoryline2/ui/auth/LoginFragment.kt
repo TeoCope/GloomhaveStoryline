@@ -22,6 +22,7 @@ import com.example.gloomhavestoryline2.other.navAnimations
 import com.example.gloomhavestoryline2.view_model.AuthViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
 class LoginFragment : Fragment(), ProgressIndicator, ToastMessage {
@@ -88,7 +89,7 @@ class LoginFragment : Fragment(), ProgressIndicator, ToastMessage {
         context?.let {
             val dialog = MaterialAlertDialogBuilder(it)
                 .setView(view)
-                .setPositiveButton(R.string.reset_password) { _, _ -> }
+                .setPositiveButton("Yes") { _, _ -> }
                 .show()
 
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
@@ -101,8 +102,9 @@ class LoginFragment : Fragment(), ProgressIndicator, ToastMessage {
                 }
                 authViewModel.email_error.observe(viewLifecycleOwner, emailErrorObserver)
                 if (authViewModel.resetPassword(email)) {
-                    Toast.makeText(context, "Check your email", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
+                    Snackbar.make(requireView(), "Check your email", Snackbar.LENGTH_SHORT).show()
+
                 }
             }
 
@@ -133,7 +135,7 @@ class LoginFragment : Fragment(), ProgressIndicator, ToastMessage {
             View.GONE
     }
 
-    override fun showToast(message: String) {
+    override fun showSnackbar(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 }

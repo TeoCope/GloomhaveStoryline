@@ -53,7 +53,8 @@
                 android:id="@+id/charactherImage"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/img" />
+                android:src="@drawable/img"
+                android:scaleType="center"/>
 
         </LinearLayout>
 
