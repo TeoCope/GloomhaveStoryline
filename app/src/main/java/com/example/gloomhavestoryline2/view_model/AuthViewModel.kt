@@ -60,22 +60,6 @@ class AuthViewModel: ViewModel() {
             }
         }
     }
-//    fun login(email: String, password: String) {
-//        _status.value = RequestStatus.LOADING
-//        if (!emailValidation(email) or !passwordValidation(password)) {
-//            _status.value = RequestStatus.ERROR
-//            return
-//        }
-//        viewModelScope.launch {
-//            val result = AuthRepository().login(email,password)
-//            if (!result) {
-//                toastMessage?.showSnackbar("Something went wrong!")
-//                _status.value = RequestStatus.ERROR
-//            } else {
-//                _status.value = RequestStatus.DONE
-//            }
-//        }
-//    }
 
     fun singUp(nickname: String, email: String, password: String) {
         _status.value = RequestStatus.LOADING
@@ -101,32 +85,6 @@ class AuthViewModel: ViewModel() {
         }
     }
 
-//    fun singUp(nickname: String, email: String, password: String) {
-//        _status.value = RequestStatus.LOADING
-//        if (!nicknameValidation(nickname) or !emailValidation(email) or !passwordValidation(password)) {
-//            _status.value = RequestStatus.ERROR
-//            return
-//        }
-//        viewModelScope.launch {
-//            val result = AuthRepository().singUp(nickname,email,password)
-//            if (!result) {
-//                toastMessage?.showSnackbar("Something went wrong!")
-//                _status.value = RequestStatus.ERROR
-//                return@launch
-//            } else {
-//                _status.value = RequestStatus.DONE
-//            }
-//        }
-//    }
-
-//    fun resetPassword(email: String): Boolean {
-//        if (!emailValidation(email)) {
-//            return false
-//        }
-//        AuthRepository().resetPassword(email)
-//        return true
-//    }
-
     fun resetPassword(email: String): Boolean {
         val validation = TextInputError(email).emailValidation()
         _email_error.value = validation
@@ -135,54 +93,5 @@ class AuthViewModel: ViewModel() {
         }
         AuthRepository().resetPassword(email)
         return true
-    }
-
-    private fun nicknameValidation(nickname: String): Boolean {
-        var check = false
-        when {
-            nickname.isEmpty() -> {
-                _nickname_error.value = R.string.empty_field
-            }
-            else -> {
-                check = true
-                _nickname_error.value = null
-            }
-        }
-        return check
-    }
-
-    private fun emailValidation(email: String): Boolean{
-        var check = false
-        when {
-            email.isEmpty() -> {
-                _email_error.value = R.string.empty_field
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _email_error.value = R.string.error_format_invalid
-            }
-            else -> {
-                check= true
-                _email_error.value = null
-            }
-        }
-        Log.d(TAG, "Errore: $check")
-        return check
-    }
-
-    private fun passwordValidation(password: String): Boolean{
-        var chek = false
-        when {
-            password.isEmpty() -> {
-                _password_error.value = R.string.empty_field
-            }
-            password.length < 8 -> {
-                _password_error.value = R.string.error_too_short
-            }
-            else -> {
-                chek = true
-                _password_error.value = null
-            }
-        }
-        return chek
     }
 }
